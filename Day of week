@@ -1,0 +1,87 @@
+#include <iostream>
+#include <cstring>
+bool checkdate(int day, int month, int year) {
+    int monthday = 30;
+    if (month == 2) {
+        if (year % 4 == 0 && year % 100 != 0) {
+            monthday = 29;
+        }
+        else {
+            monthday = 28;
+        }
+    }
+    else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+        monthday = 31;
+    }
+    return !(day < 1 || day > monthday || month < 1 || month > 12);
+}
+const char* dayweek(int day, int month, int year) {
+    int y = year - ((14 - month) / 12);
+    int m = month + 12 * ((14 - month) / 12) - 2;
+    int d = (day + y + y / 4 - (y / 100) + (y / 400) + ((31 * m) / 12)) % 7;
+    switch (d) {
+    case 0: return "Sunday";
+    case 1: return "Monday";
+    case 2: return "Tuesday";
+    case 3: return "Wednesday";
+    case 4: return "Thursday";
+    case 5: return "Friday";
+    case 6: return "Saturday";
+    default: return "Unknown";
+}
+}
+int friday(int day, int month, int year) {//поиск следующей пятницы
+    bool a = false;
+    while (!a) {
+        year++;
+        if (checkdate(day, month, year) && strcmp(dayweek(day, month, year), "Friday") == 0) {
+            a = true;
+        }
+    }
+    return year;
+}
+bool date(const char* input, int& day, int& month, int& year) {
+    int i = 0;
+    day = 0;
+    month = 0;
+    year = 0;
+    while (input[i] >= '0' && input[i] <= '9') {
+        day = day * 10 + (input[i] - '0');
+        ++i;
+    }
+    if (input[i] != '.') {
+        return false;
+    }
+    ++i;
+    while (input[i] >= '0' && input[i] <= '9') {
+        month = month * 10 + (input[i] - '0');
+        ++i;
+    }
+    if (input[i] != '.') {
+        return false;
+    }
+    ++i;
+    while (input[i] >= '0' && input[i] <= '9') {
+        year = year * 10 + (input[i] - '0');
+        ++i;
+    }
+    return !(input[i] != '\0');
+}
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cout << "Unknown\n";
+        return 0;
+    }
+    const char* H = argv[1];
+    int day = 0;
+    int month = 0;
+    int year = 0;
+    if (!date(H, day, month, year) || !checkdate(day, month, year)) {
+        std::cout << "Unknown\n";
+        return 0;
+    }
+    const char* endday = dayweek(day, month, year);
+    int endyear = friday(day, month, year);
+    std::cout << endday << "\n" << endyear;
+    return 0;
+}
