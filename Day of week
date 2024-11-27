@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstring>
-bool checkdate(int day, int month, int year) {
+bool checkdate(int day, int month, int year) {//проверка правильно ли записана дата
     int monthday = 30;
     if (month == 2) {
         if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)) {
@@ -15,7 +15,7 @@ bool checkdate(int day, int month, int year) {
     }
     return !(day < 1 || day > monthday || month < 1 || month > 12);
 }
-const char* dayweek(int day, int month, int year) {
+const char* dayweek(int day, int month, int year) { //находим день недели по дате
     int y = year - ((14 - month) / 12);
     int m = month + 12 * ((14 - month) / 12) - 2;
     int d = (day + y + y / 4 - (y / 100) + (y / 400) + ((31 * m) / 12)) % 7;
@@ -40,7 +40,7 @@ int friday(int day, int month, int year) {//поиск следующей пят
     }
     return year;
 }
-bool date(const char* input, int& day, int& month, int& year) {
+bool date(const char* input, int& day, int& month, int& year) {//проверяем ввод
     int i = 0;
     day = 0;
     month = 0;
