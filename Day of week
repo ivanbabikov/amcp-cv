@@ -3,7 +3,7 @@
 bool checkdate(int day, int month, int year) {
     int monthday = 30;
     if (month == 2) {
-        if (year % 4 == 0 && year % 100 != 0) {
+        if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)) {
             monthday = 29;
         }
         else {
